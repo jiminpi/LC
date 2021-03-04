@@ -1,0 +1,46 @@
+class Solution:
+    def findRedundantDirectedConnection(self, edges: List[List[int]]) -> List[int]:
+        n = len(edges)        
+        parent = [[] for i in range(n+1)]      
+        ans1, ans2 = [], []
+        for edge in edges:
+            start = edge[0]
+            end = edge[1]
+            if parent[end]:
+                ans1 = [parent[end][0], end]
+                ans2 = edge[:]
+                edge[0] = 0
+                edge[1] = 0
+            else:
+                parent[end].append(start)
+        
+        p = list(range(n+1))
+        rank = [0] * (n+1)
+        def find_(x):
+            if p[x] != x:
+                p[x] = find_(p[x])
+            return p[x]
+        def union_(x, y):
+            if rank[x] > rank[y]:
+                p[x] = y
+            elif rank[x] < rank[y]:
+                p[y] = x
+            else:
+                p[x] = y
+                rank[y] += 1
+                
+        for start, end in edges:
+            if start == 0:
+                continue
+            p1 = find_(start)
+            p2 = find_(end)
+            if p1 == p2:
+                if ans1:
+                    return ans1
+                else:
+                    return [start, end]
+            else:
+                union_(p1, p2)
+        return ans2
+                
+        
