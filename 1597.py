@@ -6,6 +6,7 @@
 #         self.right = right
 class Solution:
     def expTree(self, s: str) -> 'Node':
+        #https://zhuanlan.zhihu.com/p/54670963 
         ops = {'+':1, '-': 1, '*':2, '/':2}
         ops_stk = []
         node_stk = []
